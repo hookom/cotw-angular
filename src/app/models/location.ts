@@ -1,12 +1,12 @@
 export class Location {
+  name: string
+  lat: number
+  long: number
+  verified: number
+  submitter: string
+  home: string
 
-  constructor(
-    public name: string,
-    public lat: number,
-    public long: number,
-    public verified: number,
-    public submitter: string,
-    public home: string
-  ) {}
-  
+  constructor(values: Object = {}) {
+    Object.assign(this, values);
+  }
 }

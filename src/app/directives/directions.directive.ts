@@ -1,14 +1,14 @@
 import { Directive, Input, Output } from '@angular/core';
 import { } from '@types/googlemaps';
 
-import { RouteBoxerService } from '../services/routeboxer/routeboxer.service';
-// import { LocationsService } from '../services/locations/locations.service';
+import { RouteBoxerService } from '../services/routeboxer.service';
 import { Location } from '../models/location';
+import { ApiService } from '../services/api.service';
 
 @Directive({
   selector: 'sebm-google-map-directions',
   providers: [
-    // LocationsService
+    ApiService
   ]
 })
 
@@ -27,11 +27,11 @@ export class DirectionsMapDirective {
   private boxpolys: google.maps.Rectangle[] = null;
   private errorMessage: string;
   private db_locations: Location[];
-  // private waypoints: any[];
+  private waypoints: any[];
 
   constructor (
     private routeBoxerService: RouteBoxerService,
-    // private locationsService: LocationsService
+    private apiService: ApiService
   ) {}
 
   drawRoute() {
@@ -42,7 +42,7 @@ console.log('drawing');
       if (!this.directionsService) {
         this.directionsService = new google.maps.DirectionsService;
       } else {
-        // this.waypoints = [];
+        this.waypoints = [];
         this.clearMarkers();
       }
 
@@ -66,7 +66,7 @@ console.log('drawing');
       this.directionsService.route({
           origin: {placeId : this.originPlaceId },
           destination: {placeId : this.destinationPlaceId },
-          // waypoints: this.waypoints,
+          waypoints: this.waypoints,
           travelMode: google.maps.TravelMode.DRIVING
       }, (response: any, status: any) => {
           if (status === 'OK') {
@@ -85,28 +85,28 @@ console.log('drawing');
         () => {
           console.log('waypt change listener');
           this.currentRoute = this.directionsDisplay.directions.routes[0];
-          //call findcrags() if distance form field is populated
+          // call findcrags() if distance form field is populated
           
-          // this.waypoints = [];
+          this.waypoints = [];
 
-          // let coords = [];
-          // let routeLeg = this.directionsDisplay.directions.routes[0].legs[0];
-          // let wp = routeLeg.via_waypoints;
+          let coords = [];
+          let routeLeg = this.directionsDisplay.directions.routes[0].legs[0];
+          let wp = routeLeg.via_waypoints;
 
-          // for(let i=0; i<wp.length; i++) {
-          //     coords[i] = [wp[i].lat(), wp[i].lng()];
-          // }
+          for(let i=0; i<wp.length; i++) {
+              coords[i] = [wp[i].lat(), wp[i].lng()];
+          }
 
-          // for(let i=0; i<coords.length; i++) {
-          //     this.waypoints[i] = { 'location': new google.maps.LatLng(coords[i][0], coords[i][1]),
-          //                           'stopover': false };
-          // }
+          for(let i=0; i<coords.length; i++) {
+              this.waypoints[i] = { 'location': new google.maps.LatLng(coords[i][0], coords[i][1]),
+                                    'stopover': false };
+          }
         }
     );
   }
 
   findCrags(dist: number) {
-    // this.clearBoxes();
+    this.clearBoxes();
     this.clearMarkers();
 
     let distance = dist * 1.609344;
@@ -115,12 +115,12 @@ console.log('drawing');
       let path = this.currentRoute.overview_path;
       let boxes: google.maps.LatLngBounds[] = this.routeBoxerService.box(path, distance);
 
-      // this.locationsService.getLocations()
-      //   .subscribe(locations => {
-      //                             this.db_locations = locations;
-      //                             this.placeMarkers(boxes);
-      //                           },
-      //              error => this.errorMessage = <any>error);
+      this.apiService.getLocations()
+        .subscribe(locations => {
+                                  this.db_locations = locations;
+                                  this.placeMarkers(boxes);
+                                },
+                   error => this.errorMessage = <any>error);
 
       // this.drawBoxes(boxes);
     }
