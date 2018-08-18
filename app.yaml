@@ -4,9 +4,9 @@ threadsafe: true
 
 handlers:
 - url: /
-  static_files: build/index.html
-  upload: build/index.html
+  static_files: dist/cotw-angular/index.html
+  upload: dist/cotw-angular/index.html
 
 - url: /(.*)
-  static_files: build/\1
-  upload: build/(.*)
+  static_files: dist/cotw-angular/\1
+  upload: dist/cotw-angular/(.*)
