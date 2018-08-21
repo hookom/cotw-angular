@@ -5,7 +5,7 @@ import { map, catchError } from 'rxjs/operators';
 
 import { Location } from '../models/location';
 
-const url = 'https://http://35.190.151.242';
+const url = 'http://35.190.151.242';
 // const url = 'http://localhost';
 
 @Injectable()
