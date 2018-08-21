@@ -37,6 +37,9 @@ export class FindMapComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // this.apiService.getLocations()
+    //     .subscribe(locations => { this.db_locations = locations; },
+    //                error => this.errorMessage = <any>error);
     this.climbSearch = new FormGroup({
       originSearchControl: new FormControl('', Validators.required),
       destSearchControl: new FormControl('', Validators.required),

@@ -5,7 +5,7 @@ import { map, catchError } from 'rxjs/operators';
 
 import { Location } from '../models/location';
 
-const url = 'http://35.190.151.242';
+const url = 'http://35.190.151.242:8080';
 // const url = 'http://localhost';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class ApiService {
 
     public getLocations(): Observable<Location[]> {
         return this.http
-            .get(url + ':8080/locations')
+            .get(url + '/locations')
             .pipe(map(response => {
                 const todos = response.json();
                 return todos.map((location) => new Location(location));
