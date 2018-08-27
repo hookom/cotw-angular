@@ -1,26 +1,26 @@
 import { Component, ContentChildren, QueryList, AfterContentInit } from '@angular/core';
 import { FormStepComponent } from './form-step.component';
 
-import { faHandPointLeft, faHandPointRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'cotw-form',
   template:
   `<div class="stepForm">
     <button type="button" (click)="previous()" [ngClass]="{'hidden-btn': !hasPrevStep}">
-      <fa-icon [icon]="faHandPointLeft"></fa-icon>
+      <fa-icon id="formBack" [icon]="faArrowCircleLeft" size="2x"></fa-icon>
     </button>
     <ng-content></ng-content>
     <button type="button" (click)="next()" [disabled]="!_activeStep.isValid" [ngClass]="{'hidden-btn': !hasNextStep}">
-      <fa-icon [icon]="faHandPointRight"></fa-icon>
+      <fa-icon id="formForward" [icon]="faArrowCircleRight" size="2x"></fa-icon>
     </button>
   </div>`
   ,
   styleUrls: ['form.component.css']
 })
 export class FormComponent implements AfterContentInit {
-  faHandPointLeft = faHandPointLeft;
-  faHandPointRight = faHandPointRight;
+  faArrowCircleLeft = faArrowCircleLeft;
+  faArrowCircleRight = faArrowCircleRight;
 
   @ContentChildren(FormStepComponent)
   formSteps: QueryList<FormStepComponent>;

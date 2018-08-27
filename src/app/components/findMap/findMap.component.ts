@@ -70,6 +70,8 @@ export class FindMapComponent implements OnInit {
 
       this.setupPlaceChangedListener(originAutocomplete, 'ORG');
       this.setupPlaceChangedListener(destAutocomplete, 'DES');
+
+      this.setInputFocus();
     });
   }
 
@@ -84,6 +86,10 @@ export class FindMapComponent implements OnInit {
 
   private setupPlaceChangedListener(autocomplete: any, mode: any ) {
     autocomplete.addListener('place_changed', () => {
+      let next: HTMLElement = document.getElementById('formForward') as HTMLElement;
+      next.click();
+      this.setInputFocus();
+
       this.ngZone.run(() => {
         let place: google.maps.places.PlaceResult = autocomplete.getPlace();
         if (place.geometry === undefined) {
@@ -111,5 +117,10 @@ export class FindMapComponent implements OnInit {
         this.directions.drawRoute();
       });
     });
+  }
+
+  private setInputFocus() {
+    let input: HTMLElement = document.querySelector('form input') as HTMLElement;
+    input.focus();
   }
 }
